@@ -1,33 +1,64 @@
-import React, { useMemo, useState } from 'react';
+import React, { createRef, useEffect, useMemo, useState } from 'react';
 import { charToColorHex } from '../core/colors';
 
 export interface CubeFaceProps {
-  type: 'top' | 'right' | 'center';
   centerColor: string;
   onChange: ((newValue: string[]) => unknown) | null;
 }
 
 const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
-  // Function which takes in a color and returns a sticker of that color
-  const { centerColor, onChange, type } = props;
+  const { centerColor, onChange } = props;
 
   const [value, setValue] = useState(['', '', '', '', centerColor, '', '', '', '']);
 
   const colorHexes = useMemo(() => value.map((c) => charToColorHex[c]), [value]);
 
+  let refs: React.RefObject<HTMLInputElement>[] = [];
+  for (let i = 0; i < 9; i++) {
+    refs.push(createRef());
+  }
+
+  // Focus the first sticker on mount
+  // eslint-disable-next-line
+  useEffect(() => refs[0].current!.focus(), []);
+
+  // Function which takes in a color and returns a sticker of that color
   const renderSticker = (color: string, index: number) => {
     const letter = value[index] === 'E' ? '' : value[index];
 
+    const handleKeyDown = (event: KeyboardEvent | any) => {
+      if ((event.key === 'Backspace' || event.key === 'Delete') && index !== 0 && letter === '') {
+        if (index === 5) {
+          refs[3].current!.focus();
+        } else {
+          refs[index - 1].current!.focus();
+        }
+      }
+    };
+
     const changeLetter = (event: React.ChangeEvent<HTMLInputElement>) => {
       const newLetter = event.target.value.toLocaleUpperCase();
+
       if (!Object.keys(charToColorHex).includes(newLetter)) {
+        // Only change valid letters
         return;
       }
+
+      // Update the value with the new letter
       let newValue = [...value];
       newValue[index] = newLetter;
       setValue(newValue);
       if (!onChange) return;
       onChange(newValue);
+
+      // Focus the next letter
+      if (index !== 8 && newLetter !== '') {
+        if (index === 3) {
+          refs[5].current!.focus();
+        } else {
+          refs[index + 1].current!.focus();
+        }
+      }
     };
 
     const fontColor = ['R', 'B'].includes(letter) ? 'white' : 'black';
@@ -40,6 +71,7 @@ const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
       >
         {!!onChange && (
           <input
+            ref={refs[index]}
             name={`square${index}`}
             className="CubeFace__input"
             style={{ color: fontColor }}
@@ -47,28 +79,15 @@ const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
             maxLength={1}
             disabled={index === 4}
             onChange={(e) => changeLetter(e)}
+            onKeyDown={handleKeyDown}
           />
         )}
       </div>
     );
   };
 
-  let outerClasses = 'cubeHolder';
-
-  if (type === 'top') {
-    outerClasses += ' cubeFaceTop';
-  }
-
-  if (type === 'right') {
-    outerClasses += ' cubeFaceRight';
-  }
-
-  if (type === 'center') {
-    outerClasses += ' cubeFaceCenter';
-  }
-
   return (
-    <div className={outerClasses}>
+    <div className="cubeHolder">
       <div className="d-flex flex-wrap flex-shrink-1">
         {colorHexes.map((color, index) => renderSticker(color, index))}
       </div>

@@ -12,10 +12,18 @@ const handleChange = (newValue: string[]) => {
   console.log(newValue);
 };
 
+const handleNext = () => console.log('next');
+
 const Template: Story<CubeProps> = (args) => <Cube {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = { topColor: 'G', rightColor: 'B', centerColor: 'R', onChange: handleChange };
+Primary.args = {
+  topColor: 'G',
+  rightColor: 'B',
+  centerColor: 'R',
+  onChange: handleChange,
+  onNextFace: handleNext,
+};
 
-// export const Empty = Template.bind({});
-// Empty.args = { value: emptyCube, onChange: handleChange };
+export const withWhite = Template.bind({});
+withWhite.args = { ...Primary.args, topColor: 'W' };
