@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import Cube from '../components/Cube';
+import { Progress } from 'reactstrap';
 import ProgressTracker from '../components/ProgressTracker';
 import { colorCombinations } from '../core/colors';
 
@@ -24,8 +25,15 @@ const InputController = (props: InputControllerProps) => {
     T: Array(9).fill(''),
   });
 
-  const isComplete = (side: keyof CubeState) =>
-    cubeState[side].filter((el) => el !== '').length === 9;
+  const isComplete = useCallback(
+    (side: keyof CubeState) => cubeState[side].filter((el) => el !== '').length === 9,
+    [cubeState]
+  );
+
+  const numberDone = useMemo(
+    () => Object.keys(cubeState).filter((face) => isComplete(face as keyof CubeState)).length,
+    [cubeState, isComplete]
+  );
 
   const faces = Object.keys(colorCombinations);
   const [currentFaceIndex, setFaceIndex] = useState(0);
@@ -43,6 +51,20 @@ const InputController = (props: InputControllerProps) => {
     [cubeState, currentFace]
   );
 
+  const renderProgressTrackers = useMemo(
+    () =>
+      Object.entries(colorCombinations).map(([face, { centerColor }], index) => (
+        <div className="col-2">
+          <ProgressTracker
+            color={centerColor}
+            isDone={isComplete(face as keyof CubeState)}
+            onClick={() => setFaceIndex(index)}
+          />
+        </div>
+      )),
+    [isComplete]
+  );
+
   return (
     <>
       <div className={'row'}>
@@ -53,17 +75,8 @@ const InputController = (props: InputControllerProps) => {
             onNextFace={handleNextFace}
             cubeState={cubeState}
           />
-          <div className="row my-4 justify-content-center">
-            {Object.entries(colorCombinations).map(([face, { centerColor }], index) => (
-              <div className="col-2">
-                <ProgressTracker
-                  color={centerColor}
-                  isDone={isComplete(face as keyof CubeState)}
-                  onClick={() => setFaceIndex(index)}
-                />
-              </div>
-            ))}
-          </div>
+          <Progress animated value={numberDone} min={0} max={6} />
+          <div className="row my-4 justify-content-center">{renderProgressTrackers}</div>
         </div>
       </div>
     </>
