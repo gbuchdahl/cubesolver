@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Cube from './Cube';
+import Cube from '../components/Cube';
+import ProgressTracker from '../components/ProgressTracker';
 
 interface InputControllerProps {}
 
@@ -20,13 +21,16 @@ interface CubeState {
 
 const InputController = (props: InputControllerProps) => {
   const [cubeState, setCubeState] = useState<CubeState>({
-    F: Array(9).fill('E'),
-    R: Array(9).fill('E'),
-    B: Array(9).fill('E'),
-    L: Array(9).fill('E'),
-    D: Array(9).fill('E'),
-    T: Array(9).fill('E'),
+    F: Array(9).fill(''),
+    R: Array(9).fill(''),
+    B: Array(9).fill(''),
+    L: Array(9).fill(''),
+    D: Array(9).fill(''),
+    T: Array(9).fill(''),
   });
+
+  const isComplete = (side: keyof CubeState) =>
+    cubeState[side].filter((el) => el !== '').length === 9;
 
   // Front: Green
   // Right: Orange
@@ -53,6 +57,7 @@ const InputController = (props: InputControllerProps) => {
   const handleChange = useCallback(
     (value: string[]) => {
       setCubeState({ ...cubeState, [currentFace]: value });
+      console.log(cubeState);
     },
     [cubeState, currentFace]
   );
@@ -60,12 +65,23 @@ const InputController = (props: InputControllerProps) => {
   return (
     <>
       <div className={'row'}>
-        <div className={'col-8'}>
+        <div className={'col-8 card no-gutters'}>
           <Cube
             {...colorCombinations[currentFace]}
             onChange={handleChange}
             onNextFace={handleNextFace}
           />
+          <div className="row my-4 justify-content-center">
+            {Object.entries(colorCombinations).map(([face, { centerColor }], index) => (
+              <div className="col-2">
+                <ProgressTracker
+                  color={centerColor}
+                  isDone={isComplete(face as keyof CubeState)}
+                  onClick={() => setFaceIndex(index)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

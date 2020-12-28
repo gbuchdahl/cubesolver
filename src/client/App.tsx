@@ -1,5 +1,5 @@
 import React from 'react';
-import InputController from './components/InputController';
+import InputController from './templates/InputController';
 
 function App() {
   return <InputController />;

@@ -27,3 +27,5 @@ export const charToColorName: { [key: string]: string } = {
   O: 'Orange',
   '': 'Blank',
 };
+
+export const getTextColor = (color: string) => (color !== 'W' ? charToColorHex[color] : '#A9A9A9');

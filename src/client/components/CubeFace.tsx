@@ -24,7 +24,7 @@ const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
 
   // Focus the first sticker on mount
   // eslint-disable-next-line
-  useEffect(() => refs[0].current!.focus(), []);
+  useEffect(() => refs[0].current!.focus(), [centerColor]);
 
   // Function which takes in a color and returns a sticker of that color
   const renderSticker = (color: string, index: number) => {

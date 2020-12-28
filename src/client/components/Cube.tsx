@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useEffect, useState } from 'react';
 import CubeFace from './CubeFace';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleRight, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
-import { charToColorHex, charToColorName } from '../core/colors';
+import { charToColorName, getTextColor } from '../core/colors';
 import classNames from 'classnames';
 
 export interface CubeProps {
@@ -17,9 +17,9 @@ const Cube = (props: CubeProps) => {
   const { topColor, rightColor, centerColor, onChange, onNextFace } = props;
   const [isFull, setIsFull] = useState(false);
 
-  const topColorHex = topColor !== 'W' ? charToColorHex[topColor] : '#A9A9A9';
-  const rightColorHex = rightColor !== 'W' ? charToColorHex[rightColor] : '#A9A9A9';
-  const centerColorHex = centerColor !== 'W' ? charToColorHex[centerColor] : '#A9A9A9';
+  const topColorHex = getTextColor(topColor);
+  const rightColorHex = getTextColor(rightColor);
+  const centerColorHex = getTextColor(centerColor);
 
   const buttonRef = createRef<HTMLButtonElement>();
 
@@ -27,6 +27,12 @@ const Cube = (props: CubeProps) => {
   useEffect(() => {
     if (isFull && buttonRef.current) (buttonRef.current as any).focus();
   }, [isFull, buttonRef]);
+
+  const handleNextFace = useCallback(() => {
+    (buttonRef.current as any).blur();
+    setIsFull(false);
+    onNextFace();
+  }, [buttonRef, onNextFace]);
 
   const handleChange = useCallback(
     (value: string[]) => {
@@ -41,7 +47,7 @@ const Cube = (props: CubeProps) => {
   );
 
   const renderInstructions = () => (
-    <p className="card-header text-muted mb-2 w-100 text-center">
+    <p className="card-header text-muted mb-2 w-100 text-center px-0">
       Point the{' '}
       <span className="font-weight-bold" style={{ color: topColorHex }}>
         {charToColorName[topColor]}
@@ -59,7 +65,7 @@ const Cube = (props: CubeProps) => {
   );
 
   return (
-    <div className="card align-items-center">
+    <div className="align-items-center px-0">
       {renderInstructions()}
       <div className="d-flex flex-column align-items-center card-body">
         <FontAwesomeIcon
@@ -78,7 +84,7 @@ const Cube = (props: CubeProps) => {
           />
         </div>
         <button
-          onClick={onNextFace}
+          onClick={handleNextFace}
           ref={buttonRef}
           disabled={!isFull}
           type="button"
