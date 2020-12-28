@@ -2,8 +2,9 @@ import React, { createRef, useCallback, useEffect, useState } from 'react';
 import CubeFace from './CubeFace';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleRight, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
-import { charToColorName, getTextColor } from '../core/colors';
+import { charToColorName, getFaceForColor, getTextColor } from '../core/colors';
 import classNames from 'classnames';
+import { CubeState } from '../templates/InputController';
 
 export interface CubeProps {
   topColor: string;
@@ -11,10 +12,11 @@ export interface CubeProps {
   centerColor: string;
   onChange: (value: string[]) => unknown;
   onNextFace: () => unknown;
+  cubeState: CubeState;
 }
 
 const Cube = (props: CubeProps) => {
-  const { topColor, rightColor, centerColor, onChange, onNextFace } = props;
+  const { topColor, rightColor, centerColor, onChange, onNextFace, cubeState } = props;
   const [isFull, setIsFull] = useState(false);
 
   const topColorHex = getTextColor(topColor);
@@ -75,7 +77,11 @@ const Cube = (props: CubeProps) => {
           color={topColorHex}
         />
         <div className="d-flex align-items-center">
-          <CubeFace centerColor={centerColor} onChange={handleChange} />
+          <CubeFace
+            centerColor={centerColor}
+            onChange={handleChange}
+            initialState={cubeState[getFaceForColor(centerColor) as keyof CubeState]}
+          />
           <FontAwesomeIcon
             size={'3x'}
             className="ml-2"

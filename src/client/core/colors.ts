@@ -29,3 +29,30 @@ export const charToColorName: { [key: string]: string } = {
 };
 
 export const getTextColor = (color: string) => (color !== 'W' ? charToColorHex[color] : '#A9A9A9');
+
+export interface ColorCombination {
+  centerColor: string;
+  rightColor: string;
+  topColor: string;
+}
+
+// Front: Green
+// Right: Orange
+// Back: Blue
+// Left: Red
+// Down: White
+// Top: Yellow
+export const colorCombinations: { [color: string]: ColorCombination } = {
+  F: { centerColor: 'G', rightColor: 'O', topColor: 'Y' },
+  R: { centerColor: 'O', rightColor: 'B', topColor: 'Y' },
+  B: { centerColor: 'B', rightColor: 'R', topColor: 'Y' },
+  L: { centerColor: 'R', rightColor: 'G', topColor: 'Y' },
+  D: { centerColor: 'W', rightColor: 'O', topColor: 'G' },
+  T: { centerColor: 'Y', rightColor: 'O', topColor: 'B' },
+};
+
+export const getFaceForColor = (color: string) => {
+  for (const [face, { centerColor }] of Object.entries(colorCombinations)) {
+    if (centerColor === color) return face;
+  }
+};

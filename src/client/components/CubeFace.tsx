@@ -5,15 +5,20 @@ import { charToColorHex } from '../core/colors';
 export interface CubeFaceProps {
   centerColor: string;
   onChange: ((newValue: string[]) => unknown) | null;
+  initialState: string[];
 }
 
 const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
-  const { centerColor, onChange } = props;
+  const { centerColor, onChange, initialState } = props;
 
-  const [value, setValue] = useState(['', '', '', '', centerColor, '', '', '', '']);
+  const [value, setValue] = useState(initialState);
 
   // Reset the value every time we are looking at a different cube face
-  useEffect(() => setValue(['', '', '', '', centerColor, '', '', '', '']), [centerColor]);
+  useEffect(() => {
+    let newVal = [...initialState];
+    newVal[4] = centerColor;
+    setValue(newVal);
+  }, [initialState, centerColor]);
 
   const colorHexes = useMemo(() => value.map((c) => charToColorHex[c]), [value]);
 
