@@ -8,9 +8,7 @@ export default {
   component: Cube,
 } as Meta;
 
-const handleChange = (newValue: string[]) => {
-  console.log(newValue);
-};
+const handleChange = () => null;
 
 const handleNext = () => console.log('next');
 

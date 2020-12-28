@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { createRef, useEffect, useMemo, useState } from 'react';
 import { charToColorHex } from '../core/colors';
 
@@ -10,6 +11,9 @@ const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
   const { centerColor, onChange } = props;
 
   const [value, setValue] = useState(['', '', '', '', centerColor, '', '', '', '']);
+
+  // Reset the value every time we are looking at a different cube face
+  useEffect(() => setValue(['', '', '', '', centerColor, '', '', '', '']), [centerColor]);
 
   const colorHexes = useMemo(() => value.map((c) => charToColorHex[c]), [value]);
 
@@ -66,7 +70,9 @@ const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
     return (
       <div
         key={`sticker${index}`}
-        className="rounded sticker border-dark ml-1 mb-1 d-flex align-items-center justify-content-center"
+        className={classNames(
+          'rounded sticker border-dark ml-1 mb-1 d-flex align-items-center justify-content-center'
+        )}
         style={{ backgroundColor: color }}
       >
         {!!onChange && (

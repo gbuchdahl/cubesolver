@@ -25,11 +25,6 @@ $sticker-width: 80px;
   outline: none;
 }
 
-.cubeFaceRight {
-}
-
-.cubeFaceTop {
-}
-
-.cubeFaceCenter {
+.CubeFace__small {
+  transform: scale(0.33);
 }

@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { createRef, useCallback, useEffect, useState } from 'react';
 import CubeFace from './CubeFace';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleRight, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ export interface CubeProps {
   topColor: string;
   rightColor: string;
   centerColor: string;
-  onChange: (value: string[], centerColor: string) => unknown;
+  onChange: (value: string[]) => unknown;
   onNextFace: () => unknown;
 }
 
@@ -19,6 +19,7 @@ const Cube = (props: CubeProps) => {
 
   const topColorHex = topColor !== 'W' ? charToColorHex[topColor] : '#A9A9A9';
   const rightColorHex = rightColor !== 'W' ? charToColorHex[rightColor] : '#A9A9A9';
+  const centerColorHex = centerColor !== 'W' ? charToColorHex[centerColor] : '#A9A9A9';
 
   const buttonRef = createRef<HTMLButtonElement>();
 
@@ -34,29 +35,33 @@ const Cube = (props: CubeProps) => {
       } else {
         setIsFull(false);
       }
-      onChange(value, centerColor);
+      onChange(value);
     },
-    [centerColor, onChange]
+    [onChange]
   );
 
   const renderInstructions = () => (
-    <h6 className="text-muted mb-2">
-      Align the{' '}
+    <p className="card-header text-muted mb-2 w-100 text-center">
+      Point the{' '}
       <span className="font-weight-bold" style={{ color: topColorHex }}>
         {charToColorName[topColor]}
       </span>{' '}
-      center facing <strong>up</strong>, and the{' '}
+      center <strong>up</strong>, the{' '}
+      <span className="font-weight-bold" style={{ color: centerColorHex }}>
+        {charToColorName[centerColor]}
+      </span>{' '}
+      center <strong>toward you</strong>, and the{' '}
       <span className="font-weight-bold" style={{ color: rightColorHex }}>
         {charToColorName[rightColor]}
       </span>{' '}
-      center facing <strong>right</strong>.
-    </h6>
+      center <strong>toward the right</strong>.
+    </p>
   );
 
   return (
-    <div className="card p-2 d-flex col-lg-6 col-12 align-items-center">
+    <div className="card align-items-center">
       {renderInstructions()}
-      <div className="d-flex flex-column align-items-center">
+      <div className="d-flex flex-column align-items-center card-body">
         <FontAwesomeIcon
           size={'3x'}
           className="mb-2 mr-5"
@@ -77,7 +82,7 @@ const Cube = (props: CubeProps) => {
           ref={buttonRef}
           disabled={!isFull}
           type="button"
-          className={classNames('btn', 'mt-2', {
+          className={classNames('btn', 'mr-5', 'mt-2', {
             'btn-success': isFull,
             'btn-secondary': !isFull,
           })}

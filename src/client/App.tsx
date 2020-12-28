@@ -1,11 +1,8 @@
 import React from 'react';
+import InputController from './components/InputController';
 
 function App() {
-  return (
-    <div className="App">
-      <p className="mt-5 btn btn-primary">Hey</p>
-    </div>
-  );
+  return <InputController />;
 }
 
 export default App;
