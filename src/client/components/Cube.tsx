@@ -72,11 +72,11 @@ const Cube = (props: CubeProps) => {
       <div className="d-flex flex-column align-items-center card-body">
         <FontAwesomeIcon
           size={'3x'}
-          className="mb-2 mr-5"
+          className="mb-2"
           icon={faChevronCircleUp}
           color={topColorHex}
         />
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center ml-5">
           <CubeFace
             centerColor={centerColor}
             onChange={handleChange}
@@ -94,7 +94,7 @@ const Cube = (props: CubeProps) => {
           ref={buttonRef}
           disabled={!isFull}
           type="button"
-          className={classNames('btn', 'mr-5', 'mt-2', {
+          className={classNames('btn', 'mt-2', {
             'btn-success': isFull,
             'btn-secondary': !isFull,
           })}

@@ -54,7 +54,7 @@ const InputController = (props: InputControllerProps) => {
   const renderProgressTrackers = useMemo(
     () =>
       Object.entries(colorCombinations).map(([face, { centerColor }], index) => (
-        <div className="col-2">
+        <div className={'mb-2 InputController__progressTracker'}>
           <ProgressTracker
             color={centerColor}
             isDone={isComplete(face as keyof CubeState)}
@@ -67,16 +67,24 @@ const InputController = (props: InputControllerProps) => {
 
   return (
     <>
-      <div className={'row'}>
-        <div className={'col-8 card no-gutters'}>
+      <div className="row w-100">
+        <div className="col-md-10 col-sm-12 card px-0 ml-auto mr-auto">
           <Cube
             {...colorCombinations[currentFace]}
             onChange={handleChange}
             onNextFace={handleNextFace}
             cubeState={cubeState}
           />
-          <Progress animated value={numberDone} min={0} max={6} />
-          <div className="row my-4 justify-content-center">{renderProgressTrackers}</div>
+          <Progress
+            className={'col-8 ml-auto mr-auto px-0'}
+            animated
+            value={numberDone}
+            min={0}
+            max={6}
+          />
+          <div className="d-flex flex-wrap my-4 justify-content-around">
+            {renderProgressTrackers}
+          </div>
         </div>
       </div>
     </>

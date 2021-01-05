@@ -1,0 +1,7 @@
+.InputController__progressTracker {
+  display: flex;
+  justify-content: center;
+  @include media-breakpoint-down(sm) {
+    flex-basis: 33%;
+  }
+}

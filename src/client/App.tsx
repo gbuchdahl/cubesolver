@@ -1,8 +1,8 @@
 import React from 'react';
-import InputController from './templates/InputController';
+import CubeScreen from './templates/CubeScreen';
 
 function App() {
-  return <InputController />;
+  return <CubeScreen />;
 }
 
 export default App;
