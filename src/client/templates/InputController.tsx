@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Cube from '../components/Cube';
 import { Progress } from 'reactstrap';
 import ProgressTracker from '../components/ProgressTracker';
-import { colorCombinations } from '../core/colors';
+import { colorCombinations, cubeStateToString } from '../core/colors';
 
 interface InputControllerProps {}
 
@@ -35,12 +35,20 @@ const InputController = (props: InputControllerProps) => {
     [cubeState, isComplete]
   );
 
+  useEffect(() => {
+    if (numberDone === 6) console.log(cubeStateToString(cubeState));
+  }, [cubeState, numberDone]);
+
   const faces = Object.keys(colorCombinations);
   const [currentFaceIndex, setFaceIndex] = useState(0);
   const currentFace = useMemo(() => faces[currentFaceIndex], [currentFaceIndex, faces]);
 
   const handleNextFace = useCallback(() => {
     setFaceIndex((currentFaceIndex + 1) % 6);
+  }, [currentFaceIndex]);
+
+  const handlePreviousFace = useCallback(() => {
+    setFaceIndex((currentFaceIndex - 1) % 6);
   }, [currentFaceIndex]);
 
   const handleChange = useCallback(
@@ -73,6 +81,7 @@ const InputController = (props: InputControllerProps) => {
             {...colorCombinations[currentFace]}
             onChange={handleChange}
             onNextFace={handleNextFace}
+            onPreviousFace={currentFaceIndex !== 0 ? handlePreviousFace : null}
             cubeState={cubeState}
           />
           <Progress

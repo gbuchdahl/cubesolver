@@ -1,7 +1,11 @@
 import React, { createRef, useCallback, useEffect, useState } from 'react';
 import CubeFace from './CubeFace';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronCircleRight, faChevronCircleUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronCircleLeft,
+  faChevronCircleRight,
+  faChevronCircleUp,
+} from '@fortawesome/free-solid-svg-icons';
 import { charToColorName, getFaceForColor, getTextColor } from '../core/colors';
 import classNames from 'classnames';
 import { CubeState } from '../templates/InputController';
@@ -12,11 +16,20 @@ export interface CubeProps {
   centerColor: string;
   onChange: (value: string[]) => unknown;
   onNextFace: () => unknown;
+  onPreviousFace: (() => unknown) | null;
   cubeState: CubeState;
 }
 
 const Cube = (props: CubeProps) => {
-  const { topColor, rightColor, centerColor, onChange, onNextFace, cubeState } = props;
+  const {
+    topColor,
+    rightColor,
+    centerColor,
+    onChange,
+    onNextFace,
+    onPreviousFace,
+    cubeState,
+  } = props;
   const [isFull, setIsFull] = useState(false);
 
   const topColorHex = getTextColor(topColor);
@@ -69,7 +82,41 @@ const Cube = (props: CubeProps) => {
   return (
     <div className="align-items-center px-0">
       {renderInstructions()}
-      <div className="d-flex flex-column align-items-center card-body">
+      <div className="d-flex flex-column align-items-center card-body position-relative">
+        <button
+          onClick={handleNextFace}
+          ref={buttonRef}
+          disabled={!isFull}
+          type="button"
+          className={classNames('btn Cube__next', 'mt-2', {
+            'btn-success': isFull,
+            'btn-secondary': !isFull,
+          })}
+        >
+          <FontAwesomeIcon
+            size={'3x'}
+            className="mb-2"
+            icon={faChevronCircleRight}
+            color={'white'}
+          />
+        </button>
+
+        {!!onPreviousFace && (
+          <button
+            onClick={onPreviousFace}
+            ref={buttonRef}
+            type="button"
+            className="btn btn-danger Cube__previous"
+          >
+            <FontAwesomeIcon
+              size={'3x'}
+              className="mb-2"
+              icon={faChevronCircleLeft}
+              color={'white'}
+            />
+          </button>
+        )}
+
         <FontAwesomeIcon
           size={'3x'}
           className="mb-2"
