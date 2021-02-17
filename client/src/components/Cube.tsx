@@ -62,7 +62,7 @@ const Cube = (props: CubeProps) => {
   );
 
   const renderInstructions = () => (
-    <p className="card-header text-muted mb-2 w-100 text-center px-0">
+    <h5 className="card-header mb-2 w-100 text-center px-0">
       Point the{' '}
       <span className="font-weight-bold" style={{ color: topColorHex }}>
         {charToColorName[topColor]}
@@ -76,7 +76,7 @@ const Cube = (props: CubeProps) => {
         {charToColorName[rightColor]}
       </span>{' '}
       center <strong>toward the right</strong>.
-    </p>
+    </h5>
   );
 
   return (
@@ -88,10 +88,7 @@ const Cube = (props: CubeProps) => {
           ref={buttonRef}
           disabled={!isFull}
           type="button"
-          className={classNames('btn Cube__next', 'mt-2', {
-            'btn-success': isFull,
-            'btn-secondary': !isFull,
-          })}
+          className="btn btn-secondary Cube__next mt-2"
         >
           <FontAwesomeIcon
             size={'3x'}
@@ -106,7 +103,7 @@ const Cube = (props: CubeProps) => {
             onClick={onPreviousFace}
             ref={buttonRef}
             type="button"
-            className="btn btn-danger Cube__previous"
+            className="btn btn-secondary Cube__previous"
           >
             <FontAwesomeIcon
               size={'3x'}

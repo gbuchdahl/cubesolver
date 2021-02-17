@@ -3,6 +3,10 @@
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
+
+  @include media-breakpoint-down(sm) {
+    top: 24px;
+  }
 }
 
 .Cube__previous {
@@ -10,4 +14,8 @@
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
+
+  @include media-breakpoint-down(sm) {
+    top: 24px;
+  }
 }

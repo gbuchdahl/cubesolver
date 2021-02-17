@@ -45,12 +45,12 @@ export interface ColorCombination {
 // Down: White
 // Top: Yellow
 export const colorCombinations: { [color: string]: ColorCombination } = {
-  F: { centerColor: 'G', rightColor: 'O', topColor: 'Y' },
+  D: { centerColor: 'W', rightColor: 'O', topColor: 'G' },
+  T: { centerColor: 'Y', rightColor: 'O', topColor: 'B' },
   R: { centerColor: 'O', rightColor: 'B', topColor: 'Y' },
   B: { centerColor: 'B', rightColor: 'R', topColor: 'Y' },
   L: { centerColor: 'R', rightColor: 'G', topColor: 'Y' },
-  D: { centerColor: 'W', rightColor: 'O', topColor: 'G' },
-  T: { centerColor: 'Y', rightColor: 'O', topColor: 'B' },
+  F: { centerColor: 'G', rightColor: 'O', topColor: 'Y' },
 };
 
 export const getFaceForColor = (color: string) => {

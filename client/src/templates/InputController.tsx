@@ -2,9 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Cube from '../components/Cube';
 import { Progress } from 'reactstrap';
 import ProgressTracker from '../components/ProgressTracker';
-import { colorCombinations, cubeStateToString } from '../core/colors';
+import { colorCombinations } from '../core/colors';
 
-interface InputControllerProps {}
+interface InputControllerProps {
+  onSolve: (cube: CubeState) => unknown;
+}
 
 export interface CubeState {
   F: string[];
@@ -16,6 +18,8 @@ export interface CubeState {
 }
 
 const InputController = (props: InputControllerProps) => {
+  const { onSolve } = props;
+
   const [cubeState, setCubeState] = useState<CubeState>({
     F: Array(9).fill(''),
     R: Array(9).fill(''),
@@ -36,8 +40,8 @@ const InputController = (props: InputControllerProps) => {
   );
 
   useEffect(() => {
-    if (numberDone === 6) console.log(cubeStateToString(cubeState));
-  }, [cubeState, numberDone]);
+    if (numberDone === 6) onSolve(cubeState);
+  }, [cubeState, numberDone, onSolve]);
 
   const faces = Object.keys(colorCombinations);
   const [currentFaceIndex, setFaceIndex] = useState(0);
@@ -54,7 +58,6 @@ const InputController = (props: InputControllerProps) => {
   const handleChange = useCallback(
     (value: string[]) => {
       setCubeState({ ...cubeState, [currentFace]: value });
-      console.log(cubeState);
     },
     [cubeState, currentFace]
   );
@@ -75,7 +78,7 @@ const InputController = (props: InputControllerProps) => {
 
   return (
     <>
-      <div className="row w-100">
+      <div className="row w-100 no-gutters">
         <div className="col-md-10 col-sm-12 card px-0 ml-auto mr-auto">
           <Cube
             {...colorCombinations[currentFace]}
