@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Gabriel Buchdahl",
   "license": "MIT",
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "@types/express": "^4.17.11",
     "concurrently": "^5.3.0",
