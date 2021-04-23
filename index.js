@@ -1,7 +1,7 @@
 const express = require("express");
 const Cube = require("cubejs");
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 app.use(express.static("client/build"));
 
@@ -19,6 +19,4 @@ app.get("/api/solve/:cube", (req, res) => {
   res.json({ success: true, solve });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+app.listen(port, "0.0.0.0");
