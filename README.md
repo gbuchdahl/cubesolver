@@ -1,5 +1,7 @@
 # CubeSolver
 
+[Live Demo](https://lit-wildwood-85517.herokuapp.com/) (Takes a few seconds to load)
+
 ![Cube](./cubesolverScreenshot.png)
 
 Never peel the stickers off your Rubix Cube again - solve it in under two minutes with this tool!
