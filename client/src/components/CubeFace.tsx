@@ -74,6 +74,7 @@ const CubeFace: React.FunctionComponent<CubeFaceProps> = (props) => {
 
     return (
       <div
+        id={`sticker${index}`}
         key={`sticker${index}`}
         className={classNames(
           'rounded sticker border-dark ml-1 mb-1 d-flex align-items-center justify-content-center'

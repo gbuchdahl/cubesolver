@@ -1,7 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import InputController, { CubeState } from './InputController';
-import { Fade, Button, ButtonGroup } from 'reactstrap';
+import { Fade, Button, ButtonGroup, CardImg } from 'reactstrap';
 import { getSolve, solveToVerboseInstructions } from '../core/solve';
+import cubingNotation from '../img/cubingNotation.jpg';
 
 const MainScreen = () => {
   const [showCubeSolver, setShowCubeSolver] = useState(false);
@@ -63,13 +64,14 @@ const MainScreen = () => {
                 Verbose
               </Button>
             </ButtonGroup>
-            <h6 className="text-white mt-5">
+            <h3 className="text-white mt-5">
               To start, orient the green face toward you, the yellow face up, and the white face
               down.
-            </h6>
+            </h3>
             {!verbose && <h3 className={'mt-3 mb-5 text-white'}>{solve}</h3>}
             {verbose && solve && (
               <div className="d-flex flex-column align-items-start">
+                <CardImg src={cubingNotation} className={'mt-4'} />
                 {solveToVerboseInstructions(solve).map((step, index) => {
                   const { originalDirection, direction, sentence } = step;
                   return (
@@ -84,6 +86,7 @@ const MainScreen = () => {
                     </>
                   );
                 })}
+                <CardImg src={cubingNotation} className={'mt-4'} />
               </div>
             )}
           </div>

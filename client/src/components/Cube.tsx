@@ -5,10 +5,12 @@ import {
   faChevronCircleLeft,
   faChevronCircleRight,
   faChevronCircleUp,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { charToColorName, getFaceForColor, getTextColor } from '../core/colors';
 import classNames from 'classnames';
 import { CubeState } from '../templates/InputController';
+import { Button, Tooltip, UncontrolledTooltip } from 'reactstrap';
 
 export interface CubeProps {
   topColor: string;
@@ -30,6 +32,18 @@ const Cube = (props: CubeProps) => {
     onPreviousFace,
     cubeState,
   } = props;
+  // 1 = Show instructions tooltip 1
+  // 2 = Show how to enter colors
+  // 3 = When cube side is full, show progress tooltip
+  const [tooltip, setTooltip] = useState(0);
+
+  useEffect(() => {
+    if (localStorage.getItem('shownRubixTutorial') === null) {
+      setTimeout(() => setTooltip(1), 1000);
+      localStorage.setItem('shownRubixTutorial', '1');
+    }
+  }, []);
+
   const [isFull, setIsFull] = useState(false);
 
   const topColorHex = getTextColor(topColor);
@@ -57,33 +71,71 @@ const Cube = (props: CubeProps) => {
         setIsFull(false);
       }
       onChange(value);
+      if (tooltip === 2) {
+        setTooltip(3);
+      }
     },
-    [onChange]
+    [tooltip, onChange]
   );
 
   const renderInstructions = () => (
-    <p className="card-header mb-2 w-100 text-center Cube__instructions">
-      Point the{' '}
-      <span className="font-weight-bold" style={{ color: topColorHex }}>
-        {charToColorName[topColor]}
-      </span>{' '}
-      center <strong>up</strong>, the{' '}
-      <span className="font-weight-bold" style={{ color: centerColorHex }}>
-        {charToColorName[centerColor]}
-      </span>{' '}
-      center <strong>toward you</strong>, and the{' '}
-      <span className="font-weight-bold" style={{ color: rightColorHex }}>
-        {charToColorName[rightColor]}
-      </span>{' '}
-      center <strong>toward the right</strong>.
-    </p>
+    <>
+      <Tooltip
+        target={'orientationInstructions'}
+        isOpen={tooltip === 1}
+        placement={'bottom'}
+        innerClassName={'bigTooltip'}
+      >
+        <div className={'d-flex flex-row'}>
+          <h4 className={'mt-2'}>Line up your cube according to the instructions. </h4>
+          <Button onClick={() => setTooltip(2)}>
+            <FontAwesomeIcon icon={faTimes} color={'white'} />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip
+        target={'sticker0'}
+        isOpen={tooltip === 2}
+        placement={'bottom'}
+        innerClassName={'bigTooltip'}
+      >
+        <div className={'d-flex flex-row'}>
+          <h5 className={'mt-2'}>
+            Type in the first letter of the color. Press delete to go back.
+          </h5>
+          <Button onClick={() => setTooltip(3)}>
+            <FontAwesomeIcon icon={faTimes} color={'white'} />
+          </Button>
+        </div>
+      </Tooltip>
+      <p
+        id="orientationInstructions"
+        className="card-header mb-2 w-100 text-center Cube__instructions"
+      >
+        Point the{' '}
+        <span className="font-weight-bold" style={{ color: topColorHex }}>
+          {charToColorName[topColor]}
+        </span>{' '}
+        center <strong>up</strong>, the{' '}
+        <span className="font-weight-bold" style={{ color: centerColorHex }}>
+          {charToColorName[centerColor]}
+        </span>{' '}
+        center <strong>toward you</strong>, and the{' '}
+        <span className="font-weight-bold" style={{ color: rightColorHex }}>
+          {charToColorName[rightColor]}
+        </span>{' '}
+        center <strong>toward the right</strong>.
+      </p>
+    </>
   );
 
   return (
     <div className="align-items-center px-0">
       {renderInstructions()}
       <div className="d-flex flex-column align-items-center card-body position-relative">
+        <UncontrolledTooltip target={'rightButton'}>Go to the next face</UncontrolledTooltip>
         <button
+          id={'rightButton'}
           onClick={handleNextFace}
           ref={buttonRef}
           disabled={!isFull}
@@ -99,19 +151,23 @@ const Cube = (props: CubeProps) => {
         </button>
 
         {!!onPreviousFace && (
-          <button
-            onClick={onPreviousFace}
-            ref={buttonRef}
-            type="button"
-            className="btn btn-secondary Cube__previous"
-          >
-            <FontAwesomeIcon
-              size={'3x'}
-              className="mb-2"
-              icon={faChevronCircleLeft}
-              color={'white'}
-            />
-          </button>
+          <>
+            <UncontrolledTooltip target={'leftButton'}>Go to the previous face</UncontrolledTooltip>
+            <button
+              id="leftButton"
+              onClick={onPreviousFace}
+              ref={buttonRef}
+              type="button"
+              className="btn btn-secondary Cube__previous"
+            >
+              <FontAwesomeIcon
+                size={'3x'}
+                className="mb-2"
+                icon={faChevronCircleLeft}
+                color={'white'}
+              />
+            </button>
+          </>
         )}
 
         <FontAwesomeIcon
@@ -133,7 +189,9 @@ const Cube = (props: CubeProps) => {
             color={rightColorHex}
           />
         </div>
+        <UncontrolledTooltip target={'nextFaceButton'}>Go to the next face</UncontrolledTooltip>
         <button
+          id={'nextFaceButton'}
           onClick={handleNextFace}
           ref={buttonRef}
           disabled={!isFull}

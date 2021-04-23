@@ -5,7 +5,7 @@ import { cubeStateToString } from './colors';
 /** Return the solve */
 export const getSolve = async (cube: CubeState) => {
   const cubeString = cubeStateToString(cube);
-  const response = await axios.get(`/solve/${cubeString}`);
+  const response = await axios.get(`/api/solve/${cubeString}`);
   return response.data.solve;
 };
 
