@@ -62,7 +62,7 @@ const Cube = (props: CubeProps) => {
   );
 
   const renderInstructions = () => (
-    <h5 className="card-header mb-2 w-100 text-center px-0">
+    <p className="card-header mb-2 w-100 text-center Cube__instructions">
       Point the{' '}
       <span className="font-weight-bold" style={{ color: topColorHex }}>
         {charToColorName[topColor]}
@@ -76,7 +76,7 @@ const Cube = (props: CubeProps) => {
         {charToColorName[rightColor]}
       </span>{' '}
       center <strong>toward the right</strong>.
-    </h5>
+    </p>
   );
 
   return (

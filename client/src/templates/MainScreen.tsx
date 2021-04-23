@@ -3,9 +3,7 @@ import InputController, { CubeState } from './InputController';
 import { Fade, Button, ButtonGroup } from 'reactstrap';
 import { getSolve, solveToVerboseInstructions } from '../core/solve';
 
-interface CubeScreenProps {}
-
-const MainScreen = (props: CubeScreenProps) => {
+const MainScreen = () => {
   const [showCubeSolver, setShowCubeSolver] = useState(false);
 
   const [solve, setSolve] = useState<string | null>(null);
@@ -72,15 +70,18 @@ const MainScreen = (props: CubeScreenProps) => {
             {!verbose && <h3 className={'mt-3 mb-5 text-white'}>{solve}</h3>}
             {verbose && solve && (
               <div className="d-flex flex-column align-items-start">
-                {solveToVerboseInstructions(solve).map((step) => {
+                {solveToVerboseInstructions(solve).map((step, index) => {
                   const { originalDirection, direction, sentence } = step;
                   return (
-                    <div className="d-flex flex-row">
-                      <h4 className="text-white ml-2 mt-2">
-                        <span className="text-danger">{originalDirection}:</span>
-                        {` ${sentence} ${direction}`}
-                      </h4>
-                    </div>
+                    <>
+                      {index % 3 === 0 && <div className="my-3" />}
+                      <div className="d-flex flex-row">
+                        <h4 className="text-white ml-2 mt-2">
+                          <span className="text-danger">{originalDirection}:</span>
+                          {` ${sentence} ${direction}`}
+                        </h4>
+                      </div>
+                    </>
                   );
                 })}
               </div>
